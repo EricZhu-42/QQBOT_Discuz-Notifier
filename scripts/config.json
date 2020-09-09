@@ -1,0 +1,18 @@
+{
+
+    "MIRAI_API_HTTP_LOCATE" : "localhost:8080/",
+    "AUTH_KEY" : "YOUR_AUTH_KEY",
+
+    "?BOT_QQ_ID": "QQ id of your bot.",
+    "BOT_QQ_ID": 123456,
+
+    "?MASTER_QQ_ID": "QQ id of your master account.",
+    "MASTER_QQ_ID": 123456,
+
+    "?HEARTBEAT_GROUP_ID": "A debug Group, heartbeat messages are sent to this group.",
+    "HEARTBEAT_GROUP_ID": 123456,
+
+    "?STEAM_GROUP_ID": "Your target group.",
+    "STEAM_GROUP_ID": 123456
+
+}
