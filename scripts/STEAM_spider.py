@@ -6,39 +6,6 @@ import re as reg
 import requests
 from bs4 import BeautifulSoup
 
-# Function to get price from a third-party API of taobao.com, deprecated
-def get_price():
-    info_url = r"https://api03.6bqb.com/taobao/detail"
-
-    item_id_list = [
-        "561443485717",
-    ]
-
-    result = []
-    for item in item_id_list:
-        headers = {
-            "itemid" : item,
-            "apikey" : "0A199EB7B7372702F28B49C8D88944D3"
-        }
-        try:
-            ls = requests.post(info_url, data=headers)
-            data = ls.json()
-
-            for price_data in data['data']['item']['sku']:
-                if eval(price_data['price']) < 400 and eval(price_data['price']) > 200:
-                    result.append({
-                        "seller" : data['data']['seller']['shopName'],
-                        "price"  : price_data['price']
-                    })
-                    break
-        except Exception:
-            continue
-
-    exchange_data = requests.get("http://data.fixer.io/api/latest?access_key=aeb46b94105ee24186392773716cd20c&symbols=USD,CNY").json()
-    rate = exchange_data['rates']['CNY'] / exchange_data['rates']['USD']
-
-    return (result, rate)
-
 def time_equal(cust_time, standard_time):
     year, month, day = standard_time.split('-')
     return cust_time == "{:d}-{:d}-{:d}".format(int(year), int(month), int(day))
@@ -81,6 +48,7 @@ headers = {
     "User-Agent" : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36'
 }
 
+# 从论坛获取信息
 def get_data(url, section=""):
     sess = requests.session()
     data = list()
@@ -93,7 +61,7 @@ def get_data(url, section=""):
         print("Bad connection!")
         return data
     soup = BeautifulSoup(re.text, features="lxml")
-    table = soup.findAll("table")[0]
+    table = soup.findAll("table")[0] # 定位到包含帖子名称的 table
 
     for tbody in table.findAll('tbody'):
         if not tbody['id'].startswith('normalthread'):
@@ -123,16 +91,15 @@ def get_data(url, section=""):
 
 # Test, should not be called
 if __name__ == '__main__':
-    pass
-    # while (1):
-    #     if time.time() - start_time > 10:
-    #         current_date = time.strftime(r"%Y-%m-%d")
-    #         js = load_file(current_date)
-    #         data = list()
-    #         data.extend(process_data(get_data(url=discount_url, section="Discount"), js))
-    #         data.extend(process_data(get_data(url=free_url, section="Free"), js))
-    #         print(data)
-    #         save_file(current_date, js)
-    #         start_time = time.time()
-    #     else:
-    #         time.sleep(5)
+    while (1):
+        if time.time() - start_time > 10:
+            current_date = time.strftime(r"%Y-%m-%d")
+            js = load_file(current_date)
+            data = list()
+            data.extend(process_data(get_data(url=discount_url, section="Discount"), js))
+            data.extend(process_data(get_data(url=free_url, section="Free"), js))
+            print(data)
+            save_file(current_date, js)
+            start_time = time.time()
+        else:
+            time.sleep(5)

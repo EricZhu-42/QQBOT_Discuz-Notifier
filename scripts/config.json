@@ -1,7 +1,7 @@
 {
 
     "MIRAI_API_HTTP_LOCATE" : "localhost:8080/",
-    "AUTH_KEY" : "YOUR_AUTH_KEY",
+    "AUTH_KEY" : "YOUR_MIRAI_AUTH_KEY",
 
     "?BOT_QQ_ID": "QQ id of your bot.",
     "BOT_QQ_ID": 123456,
